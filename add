@@ -1,0 +1,25 @@
+#!/bin/bash
+
+path_to_list="$HOME/.readingList"
+list_file='list'
+
+rating="${1}"
+link="${2}"
+
+mkdir -p $path_to_list
+touch $path_to_list
+
+# Remove old link if any
+link_finder="[[:space:]]$link$"
+old_link=$(cat $path_to_list/$list_file | grep -E $link_finder )
+if [[ $old_link ]]; then
+  echo "Link already found, updating rating"
+  cat $path_to_list/$list_file | grep -v -E $link_finder >> $path_to_list/tmp-list \
+    && mv -f $path_to_list/tmp-list $path_to_list/$list_file
+fi
+
+
+# Add new link
+echo "$rating $link" >> "$path_to_list/$list_file"
+
+./sort-list

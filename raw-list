@@ -1,0 +1,11 @@
+#!/bin/bash
+
+path_to_list="$HOME/.readingList"
+list_file='list'
+
+top="${1-3}"
+
+mkdir -p $path_to_list
+touch $path_to_list
+
+cat $path_to_list/$list_file

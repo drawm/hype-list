@@ -1,0 +1,34 @@
+#!/bin/bash
+
+path_to_list="$HOME/.readingList"
+list_file='list'
+
+rating="${1}"
+link="${2}"
+
+mkdir -p $path_to_list
+touch $path_to_list
+
+link_count=$(cat "$path_to_list/$list_file" | wc -l)
+trim_length=$(( $link_count / 2 ))
+
+# Archive
+if [[ $(( $trim_length * 2 )) -lt $link_count ]]; then
+  cat $path_to_list/$list_file | head -n$(( $trim_length + 1 )) >> $path_to_list/archive
+else
+  cat $path_to_list/$list_file | head -n$(( $trim_length )) >> $path_to_list/archive
+fi
+
+# Sort the archive
+cat $path_to_list/archive | sort -n > $path_to_list/tmp-archive \
+  && mv -f $path_to_list/tmp-archive $path_to_list/archive
+
+# Remove
+echo "Total $(cat "$path_to_list/$list_file" | wc -l) links"
+echo "Removing ${trim_length} links"
+
+exit
+
+cat $path_to_list/$list_file | head -n $trim_length > $path_to_list/tmp-list \
+  && mv -f $path_to_list/tmp-list $path_to_list/$list_file
+

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+path_to_list="$HOME/.readingList"
+list_file='list'
+
+link="${1}"
+
+mkdir -p $path_to_list
+touch $path_to_list
+
+link_finder="[[:space:]]$link$"
+old_link=$(cat $path_to_list/$list_file | grep -E $link_finder )
+if [[ $old_link ]]; then
+  echo "Removing link $link"
+  cat $path_to_list/$list_file | grep -v -E $link_finder >> $path_to_list/tmp-list \
+    && mv -f $path_to_list/tmp-list $path_to_list/$list_file
+else
+  echo "Link $link not found"
+fi

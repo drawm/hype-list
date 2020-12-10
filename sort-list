@@ -1,0 +1,10 @@
+#!/bin/bash
+
+path_to_list="$HOME/.readingList"
+list_file='list'
+
+echo "Sorting $( cat "$path_to_list/$list_file" | wc -l ) links"
+
+cat $path_to_list/$list_file | sort -nr > $path_to_list/tmp-list \
+  && mv -f $path_to_list/tmp-list $path_to_list/$list_file
+
